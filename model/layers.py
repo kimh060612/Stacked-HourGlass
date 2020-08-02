@@ -1,8 +1,8 @@
 import tensorflow as tf
 from tensorflow import keras as tfk
 
-class BatchNorm(tfk.layers.Layer):
-    def __init__(self, eps=0.001,trainable=True, name=None, dtype=None, **kwargs):
+"""class BatchNorm(tfk.layers.Layer):
+    def __init__(self, eps=0.001,trainable=True, name="BatchNorm", dtype=None, **kwargs):
         super().__init__(trainable=trainable, name=name, dtype=dtype, **kwargs)
         self.eps = eps
     
@@ -20,12 +20,14 @@ class BatchNorm(tfk.layers.Layer):
 
     def get_config(self):
         base_config = super.get_config()
-        return {**base_config, "eps" : self.eps}
-
+        return {**base_config, "eps" : self.eps}"""
+#BottleNeck을 발생 시키기 위한 ResNet 구조 
 class ResidualLayer(tfk.layers.Layer):
-    def __init__(self, InputChannel, OutputChannel):
-        super(ResidualLayer, self).__init__(name="Residual")
+    def __init__(self, InputChannel, OutputChannel, trainable=True, name="Residual", dtype=None, **kwargs):
+        super().__init__(trainable=True, name="Residual", dtype=None, **kwargs)
         self.Reslayer = []
+        self.InputChannel = InputChannel
+        self.OutputChannel = OutputChannel
         self.Reslayer.append(tfk.layers.BatchNormalization(momentum=0.99, epsilon=0.001))
         self.Reslayer.append(tfk.layers.Conv2D(int(OutputChannel/2), kernel_size=(1,1), strides=(1,1), padding="VALID", use_bias=True))
         self.Reslayer.append(tfk.layers.BatchNormalization(momentum=0.99, epsilon=0.001))
@@ -50,15 +52,44 @@ class ResidualLayer(tfk.layers.Layer):
             Z = layers(Z)
         return Z + ResidualLayer
 
+#HourGlass Layer 재현
 class HourGlass(tfk.layers.Layer):
-    def __init__(self):
-        super(HourGlass, self).__init__()
-        self.HourGlass = []
-        self.HourGlass.append()
+    def __init__(self, Input, Output, numResidual, depth, trainable=True, name="HourGlass", dtype=None, **kwargs):
+        super().__init__(trainable=True, name="HourGlass", dtype=None, **kwargs)
+        self.depth = depth
+        self.Input = Input
+        self.Output = Output
+        self.numResidual = numResidual
+        self.HgNet = []
 
-    def call(self):
+    def MakeResidual(self):
+        Layer = []
+        Layer.append(ResidualLayer(InputChannel=self.Input, OutputChannel=self.Output))
+        for i in range(1, self.numResidual):
+            Layer.append(ResidualLayer(InputChannel=Layer[i-1].OutputChannel, OutputChannel=self.Output))
+        return Layer
+        
 
+    def MakeHoutGlass(self):
+        """self.HgNet.append(ResidualLayer(InputChannel=self.Input, OutputChannel=self.Output))
+        for i in range(1, self.numResidual + 1):
+            self.HgNet.append(ResidualLayer(self.HgNet[i-1].OutputChannel, OutputChannel=self.Output))"""
+        for i in range(self.depth):
+            Res = []
+            for j in range(3):
+                Res.extend(self.MakeResidual())
+                pass
+            if i == 0:
+                Res.append(ResidualLayer())
+            self.HgNet.append(Res)
+            
+            
+    def HourGlassForward(self, n, Input):
+        
         pass
+        
+    def call(self, Input):
+        return self.HoutGlassForward(self.depth, Input)
 
     
 
