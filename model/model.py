@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras as tfk
-from model.layers import HourGlass, ResidualLayer
+from layers import HourGlass, ResidualLayer
 
 class StackedHourGlassNetwork(tfk.Model):
     def __init__(self, InputShape = (256, 256, 3), numStack = 4, numResidual = 1, numHeatMap = 16, *args, **kwargs):

@@ -57,7 +57,7 @@ class HourGlass(tfk.layers.Layer):
             for j in range(3):
                 Res.append(self.MakeResidual())
             if i == 0:
-                Res.append(ResidualLayer())
+                Res.append(ResidualLayer(self.Input, self.Output))
             self.HgNet.append(Res)
 
     #FeedForward HourGlass Network     
