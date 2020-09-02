@@ -34,6 +34,7 @@ class ResidualLayer(tfk.layers.Layer):
 
 #HourGlass Layer 재현
 class HourGlass(tfk.layers.Layer):
+    # Input Channel, Output Channel, Residual Layer's Depth
     def __init__(self, Input, Output, numResidual, depth, trainable=True, name="HourGlass", dtype=None, **kwargs):
         super().__init__(trainable=True, name="HourGlass", dtype=None, **kwargs)
         self.depth = depth
@@ -41,6 +42,7 @@ class HourGlass(tfk.layers.Layer):
         self.Output = Output
         self.numResidual = numResidual
         self.HgNet = []
+        self.MakeHoutGlass()
 
     #Declare Residual Network
     def MakeResidual(self):
@@ -81,7 +83,7 @@ class HourGlass(tfk.layers.Layer):
         return up1 + up2
         
     def call(self, Input):
-        return self.HoutGlassForward(self.depth, Input)
+        return self.HourGlassForward(self.depth, Input)
 
     
 
