@@ -12,7 +12,7 @@ class ResidualLayer(tfk.layers.Layer):
         self.Reslayer.append(tfk.layers.Conv2D(int(OutputChannel/2), kernel_size=(1,1), strides=(1,1), padding="VALID", use_bias=True))
         self.Reslayer.append(tfk.layers.BatchNormalization(momentum=0.99, epsilon=0.001))
         self.Reslayer.append(tfk.layers.ReLU())
-        self.Reslayer.append(tfk.layers.Conv2D(int(OutputChannel/2), kernel_size=(3,3), strides=(1,1), padding="VALID",use_bias=True))
+        self.Reslayer.append(tfk.layers.Conv2D(int(OutputChannel/2), kernel_size=(3,3), strides=(1,1), padding="SAME",use_bias=True))
         self.Reslayer.append(tfk.layers.BatchNormalization(momentum=0.99, epsilon=0.001))
         self.Reslayer.append(tfk.layers.ReLU())
         self.Reslayer.append(tfk.layers.Conv2D(OutputChannel, kernel_size=(1,1), strides=(1,1), padding="VALID", activation="relu" ,use_bias=True))

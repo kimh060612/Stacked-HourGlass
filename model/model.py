@@ -18,10 +18,12 @@ class StackedHourGlassNetwork(tfk.Model):
         self.ResNet3 = ResidualLayer(InputChannel=128, OutputChannel=256)
         self.StackedHourGlass = []
         for i in range(self.numStack):
+            self.StackedHourGlass.append(HourGlass())
             
-            pass
+            
 
     def call(self, Input):
+
         pass
 
         
